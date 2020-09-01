@@ -15,6 +15,8 @@ appoinmentsRouter.post('/', async (req, res) => {
       password,
     });
 
+    delete user.password;
+
     return res.json(user);
   } catch (err) {
     return res.status(400).json({ error: err.message });
