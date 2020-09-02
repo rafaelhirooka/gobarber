@@ -1,9 +1,13 @@
 import { Router } from 'express';
+import multer from 'multer';
+import uploadConfig from '../config/upload';
 import CreateUserRepository from '../services/CreateUserService';
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
-const appoinmentsRouter = Router();
+const usersRouter = Router();
+const upload = multer(uploadConfig);
 
-appoinmentsRouter.post('/', async (req, res) => {
+usersRouter.post('/', async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
@@ -23,4 +27,13 @@ appoinmentsRouter.post('/', async (req, res) => {
   }
 });
 
-export default appoinmentsRouter;
+usersRouter.patch(
+  '/avatar',
+  ensureAuthenticated,
+  upload.single('avatar'),
+  (req, res) => {
+    return res.json({ ok: true });
+  },
+);
+
+export default usersRouter;
